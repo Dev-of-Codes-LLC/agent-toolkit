@@ -87,3 +87,9 @@ test("unescape: an escaped entity in the title is shown as typed", () => {
   // not decode it a second time into "<3".
   assert.match(html, /<title>Fish &amp;lt;3/);
 });
+
+test("stripTags: the title and description are plain text, with inline markup removed", () => {
+  const html = render("# A **bold** `code` title\n\nThe *first* paragraph.\n");
+  assert.match(html, /<title>A bold code title<\/title>/);
+  assert.match(html, /<meta name="description" content="The first paragraph\.">/);
+});

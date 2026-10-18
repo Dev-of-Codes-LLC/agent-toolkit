@@ -58,7 +58,8 @@ const escape = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/
 // One pass, so "&amp;lt;" becomes "&lt;" and not "<": the exact inverse of escape().
 const ENTITIES = { amp: "&", lt: "<", gt: ">", quot: '"' };
 const unescape = (s) => s.replace(/&(amp|lt|gt|quot);/g, (_, name) => ENTITIES[name]);
-const stripTags = (s) => s.replace(/<[^>]+>/g, "");
+// Plain text of rendered HTML. Repeats, like the SVG cleaner, so no tag can hide inside another.
+const stripTags = (s) => removeAll(s, /<[^>]*>/g);
 const slugs = new Map();
 function slugify(html) {
   const text = stripTags(html).replace(/&[a-z#0-9]+;/gi, "");
