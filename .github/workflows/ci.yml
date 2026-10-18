@@ -8,12 +8,16 @@ on:
 permissions:
   contents: read
 
+# The org allows only GitHub-owned actions, so third-party tools are installed
+# from their release tarballs, pinned to a version and a SHA-256.
+
 jobs:
   gitleaks:
     name: Secrets (gitleaks)
     runs-on: ubuntu-latest
     env:
       GITLEAKS_VERSION: 8.30.1
+      GITLEAKS_SHA256: 551f6fc83ea457d62a0d98237cbad105af8d557003051f41f3e7ca7b3f2470eb
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
@@ -21,11 +25,9 @@ jobs:
       - name: Install gitleaks
         working-directory: ${{ runner.temp }}
         run: |
-          base="https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}"
           tarball="gitleaks_${GITLEAKS_VERSION}_linux_x64.tar.gz"
-          curl -sSfLO "${base}/${tarball}"
-          curl -sSfLO "${base}/gitleaks_${GITLEAKS_VERSION}_checksums.txt"
-          sha256sum --check --ignore-missing "gitleaks_${GITLEAKS_VERSION}_checksums.txt"
+          curl -sSfLO "https://github.com/gitleaks/gitleaks/releases/download/v${GITLEAKS_VERSION}/${tarball}"
+          echo "${GITLEAKS_SHA256}  ${tarball}" | sha256sum --check
           tar -xzf "${tarball}" gitleaks
           echo "${RUNNER_TEMP}" >> "${GITHUB_PATH}"
       - name: Scan every commit
@@ -55,9 +57,20 @@ jobs:
   links:
     name: Markdown links
     runs-on: ubuntu-latest
+    env:
+      LYCHEE_VERSION: 0.24.2
+      LYCHEE_SHA256: 1f4e0ef7f6554a6ed33dd7ac144fb2e1bbed98598e7af973042fc5cd43951c9a
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
-      - uses: lycheeverse/lychee-action@e7477775783ea5526144ba13e8db5eec57747ce8 # v2.9.0
-        with:
-          args: --no-progress --include-fragments './**/*.md'
-          fail: true
+      - name: Install lychee
+        working-directory: ${{ runner.temp }}
+        run: |
+          tarball="lychee-x86_64-unknown-linux-gnu.tar.gz"
+          curl -sSfLO "https://github.com/lycheeverse/lychee/releases/download/lychee-v${LYCHEE_VERSION}/${tarball}"
+          echo "${LYCHEE_SHA256}  ${tarball}" | sha256sum --check
+          tar -xzf "${tarball}"
+          echo "${RUNNER_TEMP}" >> "${GITHUB_PATH}"
+      - name: Check links
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: lychee --no-progress --include-fragments './**/*.md'
