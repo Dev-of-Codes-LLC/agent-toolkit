@@ -2,7 +2,7 @@
 
 Claude Code skills, agents and routine recipes for a small software shop, packaged as a plugin marketplace.
 
-Status: being set up. `dev-workflow` has its first skills; `repo-ops` is still empty.
+Status: being set up. Both plugins have their first skills, and `repo-ops` has an agent.
 
 ## Install
 
@@ -19,7 +19,7 @@ In Claude Code:
 | Plugin | For | Contents |
 | --- | --- | --- |
 | [`dev-workflow`](plugins/dev-workflow) | Day-to-day development | `feature-doc`, `land-branch`, `docker-cleanup` |
-| [`repo-ops`](plugins/repo-ops) | Backlog work across repos | Planned: `ticket-writer`, `status-digest`, `org-map`, `backlog-planner` (agent) |
+| [`repo-ops`](plugins/repo-ops) | Backlog work across repos | `ticket-writer`, `status-digest`, `org-map`, `backlog-planner` (agent) |
 
 ## The rules they follow
 

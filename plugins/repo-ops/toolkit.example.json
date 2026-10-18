@@ -1,0 +1,50 @@
+{
+  "owner": {
+    "name": "Sam",
+    "github": "sam-acme"
+  },
+  "orgMap": "docs/org-map.md",
+  "backlog": {
+    "repo": "acme-labs/backlog",
+    "board": {
+      "owner": "acme-labs",
+      "number": 3,
+      "statusField": "Status",
+      "dueField": "Due"
+    },
+    "labels": {
+      "areas": ["github-org", "dns", "domain", "billing"],
+      "blocked": "question",
+      "parked": "deferred",
+      "ownerApplies": "infra"
+    }
+  },
+  "routing": [
+    {
+      "when": "A setting or click in an admin console: GitHub org settings, DNS, mail records, the domain registrar",
+      "repo": "acme-labs/backlog"
+    },
+    {
+      "when": "A bill, a renewal or a vendor account",
+      "repo": "acme-labs/backlog",
+      "labels": ["billing"]
+    },
+    {
+      "when": "A code or infrastructure change",
+      "repo": "the repo it touches"
+    }
+  ],
+  "digest": {
+    "repos": ["acme-labs/backlog", "acme-labs/api", "acme-labs/web", "acme-labs/infra"],
+    "issueTitle": "Status digest",
+    "deployWorkflows": {
+      "acme-labs/web": "deploy.yml"
+    },
+    "urls": ["https://acme.example/", "https://acme.example/sitemap.xml"]
+  },
+  "landBranch": {
+    "fastChecks": ["npm run lint", "npm test"],
+    "checkMinutes": 6,
+    "rebuild": "./scripts/update.ps1 -Label pre-{label}"
+  }
+}
