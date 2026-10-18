@@ -1,0 +1,277 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>{{TITLE}}</title>
+<meta name="description" content="{{DESCRIPTION}}">
+<meta name="color-scheme" content="light dark">
+<meta name="source-sha256" content="{{SOURCE_SHA256}}">
+<meta name="link-base" content="{{LINK_BASE}}">
+<script>
+  // Apply a saved theme before first paint so the page never flashes.
+  try { var t = localStorage.getItem("feature-doc-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<style>
+/* Reference sheet: white page, dark text, thin dark lines. Three colours with
+   one meaning each: blue = approved or an annotation, red = wrong or not
+   allowed, grey = secondary. Mono for captions, labels, code, and numbers. */
+:root {
+  color-scheme: light;
+  --bg: #ffffff; --surface: #ffffff; --surface-2: #f4f4f2; --ink: #111111; --ink-2: #3b3b3b; --grey: #6b6b6b;
+  --line: #111111; --line-soft: #cfcfcf; --blue: #1455c0; --blue-bg: #e9f0fc; --red: #c62828; --red-bg: #fcecec;
+  --pastel-1: #fff3d1; --pastel-2: #e4efff; --pastel-3: #e6f6e4;
+  --ruler: 1.4rem;
+  --font: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mono: ui-monospace, "SFMono-Regular", "Cascadia Code", Consolas, "Liberation Mono", monospace;
+  --hand: "Caveat", "Kalam", "Segoe Print", "Bradley Hand", "Chalkboard SE", "Comic Sans MS", cursive;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
+    --bg: #101214; --surface: #101214; --surface-2: #1a1d21; --ink: #ededed; --ink-2: #c8c8c8; --grey: #9c9c9c;
+    --line: #e4e4e4; --line-soft: #3a3f45; --blue: #82abff; --blue-bg: #16243a; --red: #ff8a8a; --red-bg: #3a1c1c;
+    --pastel-1: #3a3320; --pastel-2: #1c2a3c; --pastel-3: #1f3322;
+  }
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --bg: #101214; --surface: #101214; --surface-2: #1a1d21; --ink: #ededed; --ink-2: #c8c8c8; --grey: #9c9c9c;
+  --line: #e4e4e4; --line-soft: #3a3f45; --blue: #82abff; --blue-bg: #16243a; --red: #ff8a8a; --red-bg: #3a1c1c;
+  --pastel-1: #3a3320; --pastel-2: #1c2a3c; --pastel-3: #1f3322;
+}
+* { box-sizing: border-box; }
+html { background: var(--bg); color: var(--ink); font: 15.5px/1.55 var(--font); -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--bg); }
+.topbar { display: flex; justify-content: flex-end; gap: .5rem; max-width: 90rem; margin: 0 auto; padding: .6rem 1rem 0; }
+.topbar button { font: 500 .72rem/1 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); background: var(--surface); border: 1px solid var(--line); border-radius: 0; padding: .45rem .8rem; min-height: 2.75rem; cursor: pointer; }
+.topbar button:hover { color: var(--blue); border-color: var(--blue); }
+.topbar button:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.topbar button[hidden] { display: none; }
+
+/* The frame: an outer border with grid references on the edges. */
+.sheet { display: grid; grid-template-columns: var(--ruler) minmax(0, 1fr) var(--ruler); grid-template-rows: var(--ruler) minmax(0, 1fr) var(--ruler); grid-template-areas: "tl top tr" "left drawing right" "bl bottom br"; max-width: 90rem; margin: .6rem auto 2rem; border: 1.5px solid var(--line); background: var(--surface); min-height: calc(100vh - 6rem); }
+@media (min-width: 40rem) { .sheet { margin: .6rem 1rem 2rem; } }
+@media (min-width: 92rem) { .sheet { margin: .6rem auto 2rem; } }
+.ruler { display: grid; font: 600 .66rem/1 var(--mono); color: var(--grey); user-select: none; }
+.ruler span { display: grid; place-items: center; border-color: var(--line-soft); border-style: solid; border-width: 0; }
+.ruler-top { grid-area: top; grid-template-columns: repeat(8, 1fr); border-bottom: 1px solid var(--line); }
+.ruler-bottom { grid-area: bottom; grid-template-columns: repeat(8, 1fr); border-top: 1px solid var(--line); }
+.ruler-top span + span, .ruler-bottom span + span { border-left-width: 1px; }
+.ruler-left { grid-area: left; grid-template-rows: repeat(4, 1fr); border-right: 1px solid var(--line); }
+.ruler-right { grid-area: right; grid-template-rows: repeat(4, 1fr); border-left: 1px solid var(--line); }
+.ruler-left span + span, .ruler-right span + span { border-top-width: 1px; }
+.sheet > .corner { border-color: var(--line); border-style: solid; border-width: 0; }
+.corner-tl { grid-area: tl; border-right-width: 1px; border-bottom-width: 1px; }
+.corner-tr { grid-area: tr; border-left-width: 1px; border-bottom-width: 1px; }
+.corner-bl { grid-area: bl; border-right-width: 1px; border-top-width: 1px; }
+.corner-br { grid-area: br; border-left-width: 1px; border-top-width: 1px; }
+
+/* Panels: bordered cards in a grid; each has a letter chip, a bold title,
+   and a small mono caption. Phones stack them in one column. */
+.drawing { grid-area: drawing; min-width: 0; display: grid; grid-template-columns: minmax(0, 1fr); grid-auto-flow: dense; gap: 1rem; padding: 1rem; }
+@media (min-width: 48rem) { .drawing { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.1rem; padding: 1.25rem; } .panel.wide, .panel-title, .title-block { grid-column: 1 / -1; } }
+.panel { min-width: 0; border: 1px solid var(--line); background: var(--surface); padding: .9rem 1.05rem 1rem; }
+.panel-title { padding: 1.25rem 1.25rem 1.1rem; }
+.panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: .75rem; margin: 0 0 .75rem; padding-bottom: .5rem; border-bottom: 1px solid var(--line); }
+.panel-head h2 { margin: 0; font-size: 1.05rem; line-height: 1.3; }
+.chip { display: inline-grid; place-items: center; min-width: 1.5rem; height: 1.5rem; padding: 0 .35rem; margin-right: .55rem; background: var(--ink); color: var(--bg); font: 700 .78rem/1 var(--mono); vertical-align: -.2em; }
+.caption { flex: none; font: 500 .68rem/1.5 var(--mono); letter-spacing: .04em; color: var(--grey); text-align: right; white-space: nowrap; }
+h1, h2, h3, h4, h5, h6 { line-height: 1.25; margin: 1.6em 0 .5em; font-weight: 700; letter-spacing: -.01em; overflow-wrap: anywhere; }
+h1 { font-size: clamp(1.6rem, 1.3rem + 1.4vw, 2.2rem); margin: 0 0 .4rem; }
+h1 + p { font-size: 1.05rem; color: var(--ink-2); margin-top: 0; }
+.panel h3 { font-size: .95rem; margin-top: 1.3em; }
+.panel h3:first-child, .panel-head + h3 { margin-top: .2em; }
+h4, h5, h6 { font-size: .9rem; color: var(--ink-2); }
+a.anchor { color: var(--grey); text-decoration: none; margin-left: .4rem; opacity: 0; font-weight: 400; }
+h2:hover a.anchor, h3:hover a.anchor { opacity: 1; }
+p, ul, ol, table, pre, blockquote, figure { margin: 0 0 .9rem; }
+.panel > :last-child { margin-bottom: 0; }
+ul, ol { padding-left: 1.3rem; }
+li { margin: .2rem 0; }
+li > p { margin: 0 0 .4rem; }
+li > ul, li > ol { margin: .2rem 0 0; }
+a { color: var(--blue); text-underline-offset: 2px; overflow-wrap: anywhere; }
+a:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+strong { font-weight: 650; }
+code { font: .86em var(--mono); background: var(--surface-2); border: 1px solid var(--line-soft); padding: .06em .3em; overflow-wrap: anywhere; }
+pre { background: var(--surface-2); border: 1px solid var(--line-soft); padding: .85rem; overflow-x: auto; line-height: 1.45; }
+pre code { background: none; border: 0; padding: 0; font-size: .82rem; overflow-wrap: normal; white-space: pre; }
+hr { border: 0; border-top: 1px solid var(--line-soft); margin: 1.5rem 0; }
+img { max-width: 100%; height: auto; border: 1px solid var(--line-soft); }
+figure { margin: 1rem 0; }
+figcaption { font: .74rem/1.5 var(--mono); color: var(--grey); margin-top: .4rem; }
+
+/* The panel index under the title: letters and names, one line each. */
+.index { margin: 1rem 0 0; }
+.index ol { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .4rem .6rem; }
+.index a { display: inline-flex; align-items: center; min-height: 2rem; padding: .1rem .5rem .1rem .15rem; border: 1px solid var(--line-soft); color: var(--ink); text-decoration: none; font-size: .82rem; }
+.index a .chip { margin-right: .45rem; }
+.index a:hover, .index a:focus-visible { border-color: var(--blue); color: var(--blue); }
+
+/* Tables: thin rules, mono numbers, status cells. */
+.table-wrap { overflow-x: auto; margin: 0 0 1rem; border: 1px solid var(--line); }
+.table-wrap:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.table-wrap table { margin: 0; }
+table { border-collapse: collapse; width: 100%; font-size: .88rem; }
+th, td { text-align: left; vertical-align: top; padding: .45rem .65rem; border-bottom: 1px solid var(--line-soft); }
+thead th { background: var(--surface-2); border-bottom: 1px solid var(--line); font: 600 .68rem/1.5 var(--mono); letter-spacing: .04em; text-transform: uppercase; color: var(--ink-2); }
+tbody tr:last-child td { border-bottom: 0; }
+td.num, th.num { text-align: right; font-family: var(--mono); font-variant-numeric: tabular-nums; }
+td.center, th.center { text-align: center; }
+td.status { font-family: var(--mono); font-size: .82rem; white-space: nowrap; }
+td.status::before { display: inline-block; width: 1.1em; margin-right: .2em; font-weight: 700; text-align: center; }
+td.status-ok { color: var(--blue); } td.status-ok::before { content: "✓"; }
+td.status-bad { color: var(--red); } td.status-bad::before { content: "✗"; }
+td.status-na { color: var(--grey); } td.status-na::before { content: "–"; }
+/* Tables with three or more columns become labelled cards on phones. */
+@media (max-width: 40rem) {
+  .table-wrap.stack { border: 0; overflow: visible; }
+  .table-wrap.stack thead { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .table-wrap.stack table, .table-wrap.stack tbody, .table-wrap.stack tr, .table-wrap.stack td { display: block; width: 100%; }
+  .table-wrap.stack tr { border: 1px solid var(--line-soft); margin-bottom: .6rem; padding: .3rem .65rem; background: var(--surface); }
+  .table-wrap.stack td { border: 0; padding: .25rem 0; text-align: left; white-space: normal; }
+  .table-wrap.stack td[data-label]::before { content: attr(data-label); display: block; width: auto; margin: 0; text-align: left; font: 600 .64rem/1.4 var(--mono); letter-spacing: .05em; text-transform: uppercase; color: var(--grey); }
+  .table-wrap.stack td.status[data-label]::before { content: attr(data-label); }
+}
+
+/* The metadata card: the first table after the title. */
+.meta { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: .3rem 1.1rem; margin: 1rem 0 0; padding: .8rem 1rem; border: 1px solid var(--line-soft); font-size: .88rem; }
+.meta dt { font: 600 .66rem/1.9 var(--mono); letter-spacing: .05em; text-transform: uppercase; color: var(--grey); }
+.meta dd { margin: 0; min-width: 0; }
+@media (max-width: 30rem) { .meta { grid-template-columns: minmax(0, 1fr); gap: 0; } .meta dd { margin-bottom: .45rem; } }
+
+/* Callouts: blue annotation, red limit, grey quote. */
+blockquote { margin-left: 0; padding: .7rem .9rem; border-left: 3px solid var(--grey); background: var(--surface-2); color: var(--ink-2); }
+blockquote p:last-child { margin-bottom: 0; }
+blockquote.callout { color: var(--ink); }
+blockquote.callout-note, blockquote.callout-important, blockquote.callout-tip, blockquote.callout-success { border-color: var(--blue); background: var(--blue-bg); }
+blockquote.callout-limitation, blockquote.callout-warning, blockquote.callout-caution { border-color: var(--red); background: var(--red-bg); }
+blockquote.callout > p:first-child > strong:first-child { font: 700 .68rem/1 var(--mono); letter-spacing: .08em; text-transform: uppercase; margin-right: .35rem; }
+blockquote.callout-note > p:first-child > strong:first-child, blockquote.callout-important > p:first-child > strong:first-child, blockquote.callout-tip > p:first-child > strong:first-child, blockquote.callout-success > p:first-child > strong:first-child { color: var(--blue); }
+blockquote.callout-limitation > p:first-child > strong:first-child, blockquote.callout-warning > p:first-child > strong:first-child, blockquote.callout-caution > p:first-child > strong:first-child { color: var(--red); }
+
+/* Diagrams: inlined SVG in the whiteboard style. Strokes follow the theme
+   through currentColor; the classes below are what the starter SVG uses. */
+figure.diagram { color: var(--ink); }
+figure.diagram svg { display: block; width: 100%; max-width: 56rem; height: auto; max-height: 36rem; margin: 0 auto; border: 0; }
+.diagram .d-box { fill: var(--surface); stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.diagram .d-group { fill: var(--pastel-1); stroke: none; }
+.diagram .d-group-2 { fill: var(--pastel-2); stroke: none; }
+.diagram .d-group-3 { fill: var(--pastel-3); stroke: none; }
+.diagram .d-arrow { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+.diagram .d-marker { fill: currentColor; stroke: none; }
+.diagram .d-label, .diagram text { font-family: var(--hand); font-size: 19px; font-weight: 600; fill: currentColor; stroke: none; }
+.diagram .d-note { font-size: 16px; font-weight: 400; fill: var(--grey); }
+.diagram .d-accent { stroke: var(--blue); } .diagram text.d-accent, .diagram .d-marker.d-accent { fill: var(--blue); stroke: none; }
+.diagram .d-bad { stroke: var(--red); } .diagram text.d-bad, .diagram .d-marker.d-bad { fill: var(--red); stroke: none; }
+
+/* Title block, bottom right. */
+.title-block { justify-self: end; max-width: 100%; display: grid; grid-template-columns: repeat(2, minmax(0, auto)); border: 1.5px solid var(--line); margin: .25rem 0 0; }
+@media (min-width: 48rem) { .title-block { grid-template-columns: repeat(4, minmax(0, auto)); } }
+.tb-cell { min-width: 0; padding: .4rem .7rem; border: 0 solid var(--line); border-top-width: 1px; border-left-width: 1px; font-size: .8rem; }
+.tb-cell:nth-child(-n+2) { border-top-width: 0; }
+@media (min-width: 48rem) { .tb-cell:nth-child(-n+4) { border-top-width: 0; } .tb-cell:nth-child(4n+1) { border-left-width: 0; } }
+@media (max-width: 47.99rem) { .tb-cell:nth-child(odd) { border-left-width: 0; } }
+.tb-cell .tb-label { display: block; font: 600 .62rem/1.6 var(--mono); letter-spacing: .08em; text-transform: uppercase; color: var(--grey); }
+.tb-cell .tb-value { display: block; overflow-wrap: anywhere; }
+.tb-title .tb-value { font-weight: 700; }
+.tb-mono .tb-value { font-family: var(--mono); font-size: .78rem; }
+.doc-footer { grid-column: 1 / -1; margin: 0; font: .7rem/1.5 var(--mono); color: var(--grey); text-align: right; }
+
+@media (prefers-reduced-motion: no-preference) { html { scroll-behavior: smooth; } }
+@media print {
+  :root, :root[data-theme], :root:not([data-theme="light"]) {
+    color-scheme: light;
+    --bg: #fff; --surface: #fff; --surface-2: #f4f4f4; --ink: #000; --ink-2: #222; --grey: #444; --line: #000; --line-soft: #999;
+    --blue: #1a4a8a; --blue-bg: #fff; --red: #8a1c1c; --red-bg: #fff; --pastel-1: #fff; --pastel-2: #fff; --pastel-3: #fff;
+  }
+  .topbar { display: none; }
+  .sheet { margin: 0; min-height: 0; }
+  .panel, table, pre, blockquote, figure, .meta, tr, .title-block { break-inside: avoid; }
+  h2, h3 { break-after: avoid; }
+  a { color: inherit; } .table-wrap { overflow: visible; }
+  a.anchor { display: none; }
+}
+@media (forced-colors: active) {
+  .sheet, .panel, .meta, blockquote, .title-block, .tb-cell, .index a, .topbar button, .table-wrap, .ruler span { border-color: CanvasText; }
+  .chip { background: CanvasText; color: Canvas; forced-color-adjust: none; }
+}
+</style>
+</head>
+<body>
+<div class="topbar">
+  <button type="button" data-action="toggle">Dark theme</button>
+  <button type="button" data-action="system" hidden>Use system theme</button>
+</div>
+<div class="sheet">
+  <div class="corner corner-tl" aria-hidden="true"></div>
+  <div class="ruler ruler-top" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+  <div class="corner corner-tr" aria-hidden="true"></div>
+  <div class="ruler ruler-left" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+  <main class="drawing">
+{{BODY}}
+    <footer class="title-block" aria-label="Title block">
+      <div class="tb-cell tb-title"><span class="tb-label">Title</span><span class="tb-value">{{TITLE}}</span></div>
+      <div class="tb-cell tb-mono"><span class="tb-label">Source</span><span class="tb-value">{{TB_SOURCE}}</span></div>
+      <div class="tb-cell"><span class="tb-label">Owner</span><span class="tb-value">{{TB_OWNER}}</span></div>
+      <div class="tb-cell"><span class="tb-label">Status</span><span class="tb-value">{{TB_STATUS}}</span></div>
+      <div class="tb-cell tb-mono"><span class="tb-label">Rev</span><span class="tb-value">{{TB_REV}}</span></div>
+      <div class="tb-cell tb-mono"><span class="tb-label">Rendered</span><span class="tb-value">{{TB_DATE}}</span></div>
+      <div class="tb-cell tb-mono"><span class="tb-label">Sheet</span><span class="tb-value">{{TB_SHEET}}</span></div>
+      <div class="tb-cell tb-mono"><span class="tb-label">Note</span><span class="tb-value">Markdown is the source of record</span></div>
+    </footer>
+    <p class="doc-footer">{{FOOTER}}</p>
+  </main>
+  <div class="ruler ruler-right" aria-hidden="true"><span>A</span><span>B</span><span>C</span><span>D</span></div>
+  <div class="corner corner-bl" aria-hidden="true"></div>
+  <div class="ruler ruler-bottom" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span></div>
+  <div class="corner corner-br" aria-hidden="true"></div>
+</div>
+<script>
+(function () {
+  var root = document.documentElement, key = "feature-doc-theme";
+  var toggle = document.querySelector('[data-action="toggle"]'), system = document.querySelector('[data-action="system"]');
+  var media = window.matchMedia("(prefers-color-scheme: dark)");
+  function effective() { return root.dataset.theme || (media.matches ? "dark" : "light"); }
+  function sync() {
+    // The visible text is the accessible name: it names the theme a click switches to.
+    toggle.textContent = effective() === "dark" ? "Light theme" : "Dark theme";
+    system.hidden = !root.dataset.theme;
+  }
+  toggle.addEventListener("click", function () {
+    var next = effective() === "dark" ? "light" : "dark";
+    root.dataset.theme = next;
+    try { localStorage.setItem(key, next); } catch (e) {}
+    sync();
+  });
+  system.addEventListener("click", function () {
+    delete root.dataset.theme;
+    try { localStorage.removeItem(key); } catch (e) {}
+    sync();
+    toggle.focus();
+  });
+  if (media.addEventListener) media.addEventListener("change", sync);
+  sync();
+  // Only tables that actually scroll become a focusable, named region.
+  function regions() {
+    document.querySelectorAll(".table-wrap").forEach(function (wrap) {
+      var scrolls = wrap.scrollWidth > wrap.clientWidth + 1;
+      if (scrolls) {
+        wrap.setAttribute("tabindex", "0");
+        wrap.setAttribute("role", "region");
+        var head = wrap.querySelector("thead");
+        wrap.setAttribute("aria-label", head ? "Table: " + head.textContent.trim().replace(/\s+/g, ", ").slice(0, 80) : "Table");
+      } else {
+        wrap.removeAttribute("tabindex");
+        wrap.removeAttribute("role");
+        wrap.removeAttribute("aria-label");
+      }
+    });
+  }
+  regions();
+  window.addEventListener("resize", regions);
+})();
+</script>
+</body>
+</html>
