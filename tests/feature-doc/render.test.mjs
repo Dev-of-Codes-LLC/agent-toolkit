@@ -1,5 +1,5 @@
 // Regression tests for feature-doc's render.mjs: the SVG diagram sanitizer
-// and text unescaping. Run with: node --test tests/
+// and text unescaping. Run with: node --test "tests/**/*.test.mjs"
 //
 // Each case writes a Markdown page whose only image is a local .svg, renders
 // it, and checks the diagram's <figure>. The renderer must either inline a

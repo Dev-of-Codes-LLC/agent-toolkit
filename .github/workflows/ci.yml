@@ -91,7 +91,7 @@ jobs:
           node plugins/dev-workflow/skills/feature-doc/scripts/render.mjs tests/feature-doc/sample.md "${out}"
           grep -q 'name="source-sha256"' "${out}"
       - name: feature-doc renderer tests (SVG sanitizer, unescape)
-        run: node --test tests/
+        run: node --test "tests/**/*.test.mjs"
       - name: docker-cleanup audit (read-only)
         shell: pwsh
         run: ./plugins/dev-workflow/skills/docker-cleanup/scripts/audit.ps1
