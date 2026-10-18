@@ -17,7 +17,7 @@
 // emphasis, inline code, links (balanced parentheses), images (a lone image
 // becomes a figure with its alt text as caption; a lone image of a local .svg
 // file is inlined as a diagram, with its scripts, styles, and event handlers
-// removed), fenced code, ordered and unordered lists (loose or tight, start
+// removed, or left as an image if it cannot be cleaned), fenced code, ordered and unordered lists (loose or tight, start
 // numbers, nesting by indentation, continuation paragraphs and fences inside
 // items), GFM tables with or without outer pipes and with alignment (a body
 // cell that is exactly yes/pass/ok or no/fail is marked as a status cell:
@@ -55,7 +55,9 @@ const source = readFileSync(input, "utf8").replace(/\r\n?/g, "\n").replace(/\t/g
 const template = readFileSync(join(here, "..", "assets", "template.html"), "utf8");
 
 const escape = (s) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
-const unescape = (s) => s.replace(/&amp;/g, "&").replace(/&lt;/g, "<").replace(/&gt;/g, ">").replace(/&quot;/g, '"');
+// One pass, so "&amp;lt;" becomes "&lt;" and not "<": the exact inverse of escape().
+const ENTITIES = { amp: "&", lt: "<", gt: ">", quot: '"' };
+const unescape = (s) => s.replace(/&(amp|lt|gt|quot);/g, (_, name) => ENTITIES[name]);
 const stripTags = (s) => s.replace(/<[^>]+>/g, "");
 const slugs = new Map();
 function slugify(html) {
@@ -138,22 +140,42 @@ const plain = (md) => unescape(stripTags(inline(md, { links: false })));
 // --- diagrams ----------------------------------------------------------------
 // A lone image of a local .svg file is inlined so the page stays standalone
 // and the template's diagram classes (hand font, strokes that follow the
-// theme) apply. Scripts, styles, event handlers, and external references are
-// removed: the SVG is a drawing, not code.
+// theme) apply. Scripts, styles, comments, animations, event handlers, and
+// external references are removed: the SVG is a drawing, not code. If any of
+// them is still there after cleaning, the SVG is not inlined at all and stays
+// a plain <img>, where a browser never runs its scripts.
+const SVG_STRIP = [
+  /<\?xml[\s\S]*?\?>/g,
+  /<!DOCTYPE[\s\S]*?>/gi,
+  /<!--[\s\S]*?-->/g,
+  /<script\b[\s\S]*?<\/script[^>]*>/gi,
+  /<style\b[\s\S]*?<\/style[^>]*>/gi,
+  /<(foreignObject|image|use|set|animate\w*)\b[\s\S]*?(\/>|<\/\1[^>]*>)/gi,
+  /[\s/]+on[a-z]+\s*=\s*("[^"]*"|'[^']*'|[^\s"'>]+)/gi,
+  /[\s/]+(xlink:)?href\s*=\s*("(?!#)[^"]*"|'(?!#)[^']*'|(?!["'#])[^\s>]+)/gi,
+];
+const SVG_UNSAFE = /<\s*\/?\s*(script|style|foreignObject|iframe|object|embed|image|use|set|animate\w*)\b|<!--|[\s/]on[a-z]+\s*=|javascript:/i;
+// Remove every match, then look again: one pass leaves "<script" behind when
+// the input hides a match inside another, such as "<scr<script></script>ipt>".
+function removeAll(s, pattern) {
+  let previous;
+  do {
+    previous = s;
+    s = s.replace(pattern, "");
+  } while (s !== previous);
+  return s;
+}
 function inlineSvg(src, alt) {
   if (!/\.svg$/i.test(src) || /^[a-z]+:/i.test(src) || isAbsolute(src)) return null;
   const path = join(dirname(input), src);
   if (!existsSync(path)) return null;
-  let svg = readFileSync(path, "utf8")
-    .replace(/<\?xml[\s\S]*?\?>/g, "")
-    .replace(/<!DOCTYPE[\s\S]*?>/gi, "")
-    .replace(/<!--[\s\S]*?-->/g, "")
-    .replace(/<script[\s\S]*?<\/script>/gi, "")
-    .replace(/<style[\s\S]*?<\/style>/gi, "")
-    .replace(/<(foreignObject|image|use)\b[\s\S]*?(\/>|<\/\1>)/gi, "")
-    .replace(/\s+on[a-z]+\s*=\s*("[^"]*"|'[^']*')/gi, "")
-    .replace(/\s+(xlink:)?href\s*=\s*("(?!#)[^"]*"|'(?!#)[^']*')/gi, "")
-    .trim();
+  let svg = readFileSync(path, "utf8");
+  for (const pattern of SVG_STRIP) svg = removeAll(svg, pattern);
+  svg = svg.trim();
+  if (SVG_UNSAFE.test(svg)) {
+    console.warn(`render: ${src} not inlined: it still has script, style, animation or event-handler markup after cleaning`);
+    return null;
+  }
   const open = svg.match(/^<svg\b[^>]*>/i);
   if (!open) return null;
   let tag = open[0].replace(/\s+(role|aria-label|aria-hidden)\s*=\s*("[^"]*"|'[^']*')/gi, "");

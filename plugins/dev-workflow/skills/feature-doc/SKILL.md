@@ -304,9 +304,11 @@ How to make one:
    renderer removes it and applies the page's own theme.
 2. Place it in the Markdown as a lone image with the caption as alt text:
    `![What the diagram shows](<slug>/<name>.svg)`. The renderer inlines
-   the SVG as a figure (scripts, styles, event handlers, and external
-   references removed), so the HTML stays standalone and the diagram
-   follows light and dark mode.
+   the SVG as a figure (scripts, styles, comments, animations, event
+   handlers, and external references removed), so the HTML stays
+   standalone and the diagram follows light and dark mode. An SVG that
+   still has any of them after cleaning is not inlined: it stays a plain
+   image, and the renderer prints a warning. Redraw it from the starter.
 3. Open the rendered page in both themes and at phone width before you
    finish.
 
