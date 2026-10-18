@@ -1,0 +1,23 @@
+{
+  "skill_name": "feature-doc",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "We just finished payment matching in acme-labs/api on the branch checked out here (changes are staged, not committed). Turn it into a polished feature doc we can keep in our wiki.",
+      "expected_output": "One Markdown feature document plus an HTML rendering covering what payment matching does, why, how to use it, guarantees backed by tests, limitations, key decisions, verification, glossary, and a technical appendix, with facts traceable to the diff, the decision records and the status file.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "can you write up the invoice reminders feature (see ADR 0012 and the status file in this repo) as a presentable feature page? something i could share with a friend who runs a small shop but doesn't code",
+      "expected_output": "A reader edition readable by a non-technical small-business owner, with plain-language lead sections, the limits stated honestly (for example, reminders are email only), no internal identifiers in the body, and links into the private repo stripped; Markdown plus HTML.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Document the theme system side project in acme-labs/web (ADR 0016-theme-system, docs/theming.md, the status file) as a feature doc for the project wiki.",
+      "expected_output": "A feature document for the theme system (themes, modes, tokens, accessibility checks, limitations such as unverified forced colours) in Markdown and HTML, facts drawn from the ADR, theming.md, and the status file.",
+      "files": []
+    }
+  ]
+}

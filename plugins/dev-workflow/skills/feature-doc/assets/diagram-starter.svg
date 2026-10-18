@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 720 220" width="720" height="220" font-family="Caveat, Kalam, 'Segoe Print', 'Bradley Hand', 'Chalkboard SE', cursive">
+  <!--
+    Whiteboard-style diagram starter. Copy this file to docs/features/<slug>/<name>.svg,
+    keep the <defs> and the class names, and replace the shapes and labels.
+    Rules: rounded rectangles and plain arrows only; 2 to 4 words per label;
+    one arrow per relationship; no crossing lines; at most 8 boxes.
+    The <style> below is for viewers that show the file on its own (GitHub).
+    The feature-doc renderer removes it and applies the page's own theme.
+  -->
+  <defs>
+    <filter id="wobble" x="-2%" y="-2%" width="104%" height="104%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.02" numOctaves="3" seed="2" result="noise"/>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path class="d-marker" d="M 0 0 L 10 5 L 0 10 z"/>
+    </marker>
+  </defs>
+  <style>
+    .d-box { fill: #ffffff; stroke: #111111; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .d-group { fill: #fff3d1; stroke: none; }
+    .d-group-2 { fill: #e4efff; stroke: none; }
+    .d-group-3 { fill: #e6f6e4; stroke: none; }
+    .d-arrow { fill: none; stroke: #111111; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .d-marker { fill: #111111; stroke: none; }
+    .d-label, text { font-size: 19px; font-weight: 600; fill: #111111; }
+    .d-note { font-size: 16px; font-weight: 400; fill: #6b6b6b; }
+    .d-accent { stroke: #1455c0; } text.d-accent, .d-marker.d-accent { fill: #1455c0; stroke: none; }
+    .d-bad { stroke: #c62828; } text.d-bad, .d-marker.d-bad { fill: #c62828; stroke: none; }
+    @media (prefers-color-scheme: dark) {
+      .d-box { fill: #101214; stroke: #ededed; }
+      .d-group { fill: #3a3320; } .d-group-2 { fill: #1c2a3c; } .d-group-3 { fill: #1f3322; }
+      .d-arrow { stroke: #ededed; } .d-marker { fill: #ededed; }
+      .d-label, text { fill: #ededed; } .d-note { fill: #9c9c9c; }
+      .d-accent { stroke: #82abff; } text.d-accent, .d-marker.d-accent { fill: #82abff; }
+      .d-bad { stroke: #ff8a8a; } text.d-bad, .d-marker.d-bad { fill: #ff8a8a; }
+    }
+  </style>
+
+  <!-- Soft fill behind a group of boxes (optional). -->
+  <rect class="d-group" x="250" y="40" width="220" height="140" rx="18"/>
+  <text class="d-note" x="260" y="30">inside the API</text>
+
+  <!-- Shapes and arrows get the hand-drawn wobble; labels stay crisp. -->
+  <g filter="url(#wobble)">
+    <rect class="d-box" x="30" y="80" width="160" height="60" rx="14"/>
+    <rect class="d-box" x="280" y="80" width="160" height="60" rx="14"/>
+    <rect class="d-box" x="530" y="80" width="160" height="60" rx="14"/>
+    <path class="d-arrow" d="M 190 110 C 220 108, 250 112, 278 110" marker-end="url(#arrow)"/>
+    <path class="d-arrow" d="M 440 110 C 470 108, 500 112, 528 110" marker-end="url(#arrow)"/>
+  </g>
+
+  <text class="d-label" x="110" y="117" text-anchor="middle">Upload file</text>
+  <text class="d-label" x="360" y="117" text-anchor="middle">Parse rows</text>
+  <text class="d-label" x="610" y="117" text-anchor="middle">Record results</text>
+  <text class="d-note" x="234" y="98" text-anchor="middle">CSV</text>
+</svg>
