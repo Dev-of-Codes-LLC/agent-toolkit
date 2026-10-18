@@ -1,0 +1,20 @@
+{
+  "name": "agent-toolkit",
+  "description": "Claude Code skills, agents and routine recipes for a small software shop",
+  "owner": {
+    "name": "Dev of Codes LLC",
+    "email": "hello@devofcodes.com"
+  },
+  "plugins": [
+    {
+      "name": "dev-workflow",
+      "source": "./plugins/dev-workflow",
+      "description": "Day-to-day development: write up finished features, land branches, clean up Docker"
+    },
+    {
+      "name": "repo-ops",
+      "source": "./plugins/repo-ops",
+      "description": "Backlog work across repos: write tickets, post status digests, keep an org map, plan read-only"
+    }
+  ]
+}

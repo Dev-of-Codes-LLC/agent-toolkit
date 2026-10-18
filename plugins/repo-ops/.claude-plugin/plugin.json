@@ -1,0 +1,11 @@
+{
+  "name": "repo-ops",
+  "version": "0.0.1",
+  "description": "Backlog work across repos: write tickets, post status digests, keep an org map, plan read-only",
+  "author": {
+    "name": "Dev of Codes LLC",
+    "email": "hello@devofcodes.com"
+  },
+  "repository": "https://github.com/Dev-of-Codes-LLC/agent-toolkit",
+  "license": "MIT"
+}
