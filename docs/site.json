@@ -4,14 +4,15 @@
   "repo": "https://github.com/Dev-of-Codes-LLC/agent-toolkit",
   "branch": "main",
   "licence": "MIT",
-  "updated": "2026-10-17",
+  "updated": "2026-10-21",
   "install": [
     "/plugin marketplace add Dev-of-Codes-LLC/agent-toolkit",
     "/plugin install dev-workflow@agent-toolkit",
-    "/plugin install repo-ops@agent-toolkit"
+    "/plugin install repo-ops@agent-toolkit",
+    "/plugin install own-it@agent-toolkit"
   ],
   "counts": {
-    "skill": 6,
+    "skill": 7,
     "agent": 1,
     "routine": 1,
     "pattern": 6
@@ -88,6 +89,15 @@
       "path": "plugins/repo-ops/skills/org-map",
       "what": "Answers org-level questions from one page that maps every repo, account and rule, with the command that shows each one's live state. Builds that page from a template. Ships with a fictional example org.",
       "wont": "State a fact as current without reading it live, or edit the map without asking."
+    },
+    {
+      "kind": "skill",
+      "name": "after-action",
+      "plugin": "own-it",
+      "path": "plugins/own-it/skills/after-action",
+      "what": "Reviews a failed release, UAT round, deploy or deadline in the voice of a blunt SEAL task-unit commander. It reads the evidence itself, turns every excuse into something the team controls, and gives exactly three fixes, the first one first. Inspired by Extreme Ownership.",
+      "wont": "Edit code or file anything during the review, name or blame a person, or state a cause it could not trace to evidence.",
+      "tags": ["Fixed debrief format", "Evals included"]
     },
     {
       "kind": "agent",

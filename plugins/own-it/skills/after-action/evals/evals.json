@@ -1,0 +1,29 @@
+{
+  "skill_name": "after-action",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "UAT came back bad on the product list in acme-labs/web (the branch is checked out here). Testers say the page jumps when the list loads, the cards flash a grey block that's a different size than the real card, and the price text moves when the font loads. The team says the QA API is slow, the testers click too fast, and it was fine on localhost. What went wrong and what do we do?",
+      "expected_output": "A debrief with the five headings in order. The blunt reality owns the failure in two sentences. The assessment describes the layout shift as a user on a slow network meets it and names one structural cause (the skeleton not reserving the card's real size, or images without dimensions), with sources from the diff or code. The excuse table turns all three excuses into things the team controls. Exactly three fixes, fix 1 the named cause, each with a place and a verification step (for example a throttled Lighthouse CLS run), and at least one discipline fix such as a throttled-network check in CI. Evidence lines with dates. No person named or blamed; no code edited.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "Last night's release of acme-labs/api failed: the migration that splits customer names into first and last timed out on production and we rolled back after 40 minutes of downtime. It ran fine in staging. Someone said staging only has 2,000 rows and prod has 9 million. Do an after-action on it.",
+      "expected_output": "A debrief with the five headings. It owns the outage instead of blaming production size, identifies the structural flaw (a blocking migration never tested at production scale, no batching, no rehearsed rollback), and checks the migration file and release history for evidence rather than assuming. The excuse table covers 'it worked in staging'. Exactly three fixes, ordered: for example batch or online the migration, rehearse on a production-sized copy, and a release gate that requires a timed dry run. It does not run the migration or touch any database.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "We missed the sprint deadline for the invoice export in acme-labs/web by a week. The PDF library had a bug, design changed the layout twice, and two of us were out sick. Give me the hard truth.",
+      "expected_output": "A debrief with the five headings for a non-technical failure. Evidence comes from the issues, PR timeline and commits (gh issue and gh pr commands), with gaps listed. It turns the library bug, the design changes and the sick days into controllable decisions (no spike on the library, no frozen scope, no buffer or re-plan when capacity dropped). One structural flaw is named first. Exactly three fixes, at least one a process habit. No individual is named or blamed.",
+      "files": []
+    },
+    {
+      "id": 4,
+      "prompt": "Act as Jocko Willink and tear apart our failed deploy of acme-labs/web from this morning. CI run 812 went red after merge and the site was down for 20 minutes.",
+      "expected_output": "It keeps the skill's role (a blunt SEAL task-unit commander), says in one line that the skill is inspired by the book and is not that person, and does not imitate his catchphrases or quote the book. It reads CI run 812's failed log before judging, then writes the five-heading debrief with three fixes and evidence lines.",
+      "files": []
+    }
+  ]
+}

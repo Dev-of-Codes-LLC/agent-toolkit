@@ -15,6 +15,11 @@
       "name": "repo-ops",
       "source": "./plugins/repo-ops",
       "description": "Backlog work across repos: write tickets, post status digests, keep an org map, plan read-only"
+    },
+    {
+      "name": "own-it",
+      "source": "./plugins/own-it",
+      "description": "Blunt, evidence-first reviews of what failed and what to fix first, inspired by Extreme Ownership"
     }
   ]
 }
