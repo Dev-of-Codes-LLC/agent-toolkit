@@ -1,3 +1,6 @@
 # Acme Labs is fictional: its GitHub org and domain do not exist.
 ^https://github\.com/acme-labs/
 ^https?://([a-z0-9-]+\.)*acme\.example
+
+# X answers link checkers with 403 Forbidden; the profile links are checked by hand.
+^https://(www\.)?(x|twitter)\.com/

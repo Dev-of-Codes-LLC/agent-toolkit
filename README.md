@@ -4,7 +4,7 @@ Claude Code skills, an agent and a routine recipe for a small software shop, pac
 
 Each one says what it will not do. Most of them only read; the few that write say exactly what they write, and show you first.
 
-Status: early. Both plugins are at version 0.1.
+Status: early. All three plugins are at version 0.1.
 
 ## Install
 
@@ -14,14 +14,16 @@ In Claude Code:
 /plugin marketplace add Dev-of-Codes-LLC/agent-toolkit
 /plugin install dev-workflow@agent-toolkit
 /plugin install repo-ops@agent-toolkit
+/plugin install own-it@agent-toolkit
 ```
 
-Install one plugin or both. Claude uses a skill when your request matches it; you can also name it ("use land-branch").
+Install any of them. Claude uses a skill when your request matches it; you can also name it ("use land-branch").
 
 | Plugin | For | Contents |
 | --- | --- | --- |
 | [`dev-workflow`](plugins/dev-workflow/README.md) | Day-to-day development in one repo | [`feature-doc`](#feature-doc), [`land-branch`](#land-branch), [`docker-cleanup`](#docker-cleanup) |
 | [`repo-ops`](plugins/repo-ops/README.md) | Backlog and status work across repos | [`ticket-writer`](#ticket-writer), [`status-digest`](#status-digest), [`org-map`](#org-map), [`backlog-planner`](#backlog-planner-agent) (agent) |
+| [`own-it`](plugins/own-it/README.md) | Blunt reviews of what failed, inspired by *Extreme Ownership* | [`after-action`](#after-action) |
 
 ## How they fit together
 
@@ -111,6 +113,20 @@ A read-only planner for work that spans several repos or accounts.
 - **Ask it:** "plan moving our DNS to the new provider", "turn this list of findings into tickets".
 - **Won't:** create or edit anything. It has no edit tools, and its prompt names the only commands it may run. To block writes outright, add the permission rules in [the read-only agents pattern](patterns/read-only-agents.md).
 
+## own-it
+
+Inspired by *Extreme Ownership* by Jocko Willink and Leif Babin ([book](https://openlibrary.org/works/OL20017105W) · [@jockowillink](https://x.com/jockowillink)). Not affiliated with or endorsed by them. The doctrine in these skills is in our own words.
+
+### after-action
+
+Reviews something that failed (a release, a UAT round, a deploy, a migration, a deadline) and ends with the one fix that comes first.
+
+- **You get:** a short debrief in the voice of a blunt SEAL task-unit commander, under five fixed headings: the blunt reality, the detached assessment, the recalibration plan, the marching orders, and the evidence with dates.
+- **How it works:** it reads the failure report, the diff, CI runs and any numbers before it judges. It lists the excuses and turns each one into a decision the team controls. It ranks the causes by how much of the failure each explains for real users, names the top one, and gives exactly three fixes, each with a way to verify it. At least one fix is a habit, such as a test or a CI gate.
+- **Ask it:** "UAT came back bad, what went wrong?", "do an after-action on last night's release", "we missed the deadline, give me the hard truth".
+- **Won't:** edit code, commit or file anything during the review, name or blame a person, or state a cause it could not trace to evidence.
+- **Needs:** `git`, and the GitHub CLI to read issues, pull requests and CI runs. Without it, it works from what you paste.
+
 ## Also here
 
 | Folder | What is in it |
@@ -132,6 +148,7 @@ A read-only planner for work that spans several repos or accounts.
 
 - Built for a one-person company. A team may want more approvals, not fewer.
 - The `repo-ops` skills assume GitHub and the `gh` CLI. `docker-cleanup` assumes Docker.
+- `after-action` is hard on plans and processes on purpose. It never names a person, but read the debrief before you share it with your team.
 - Written for Claude Code. The rules and patterns carry over to other agents; the install steps do not.
 
 ## Licence
