@@ -4,7 +4,7 @@ Claude Code skills, an agent and a routine recipe for a small software shop, pac
 
 Each one says what it will not do. Most of them only read; the few that write say exactly what they write, and show you first.
 
-Status: early. All three plugins are at version 0.1.
+Status: early. All three plugins are at version 0.2.0, renamed on 2026-10-24 (see [Renamed](#renamed)).
 
 ## Install
 
@@ -12,18 +12,33 @@ In Claude Code:
 
 ```text
 /plugin marketplace add Dev-of-Codes-LLC/agent-toolkit
-/plugin install dev-workflow@agent-toolkit
-/plugin install repo-ops@agent-toolkit
-/plugin install own-it@agent-toolkit
+/plugin install devofcodes-dev-workflow@agent-toolkit
+/plugin install devofcodes-repo-ops@agent-toolkit
+/plugin install devofcodes-own-it@agent-toolkit
 ```
 
 Install any of them. Claude uses a skill when your request matches it; you can also name it ("use land-branch").
 
 | Plugin | For | Contents |
 | --- | --- | --- |
-| [`dev-workflow`](plugins/dev-workflow/README.md) | Day-to-day development in one repo | [`feature-doc`](#feature-doc), [`land-branch`](#land-branch), [`docker-cleanup`](#docker-cleanup) |
-| [`repo-ops`](plugins/repo-ops/README.md) | Backlog and status work across repos | [`ticket-writer`](#ticket-writer), [`status-digest`](#status-digest), [`org-map`](#org-map), [`backlog-planner`](#backlog-planner-agent) (agent) |
-| [`own-it`](plugins/own-it/README.md) | Blunt reviews of what failed, inspired by *Extreme Ownership* | [`after-action`](#after-action) |
+| [`devofcodes-dev-workflow`](plugins/devofcodes-dev-workflow/README.md) | Day-to-day development in one repo | [`feature-doc`](#feature-doc), [`land-branch`](#land-branch), [`docker-cleanup`](#docker-cleanup) |
+| [`devofcodes-repo-ops`](plugins/devofcodes-repo-ops/README.md) | Backlog and status work across repos | [`ticket-writer`](#ticket-writer), [`status-digest`](#status-digest), [`org-map`](#org-map), [`backlog-planner`](#backlog-planner-agent) (agent) |
+| [`devofcodes-own-it`](plugins/devofcodes-own-it/README.md) | Blunt reviews of what failed, inspired by *Extreme Ownership* | [`after-action`](#after-action) |
+
+## Renamed
+
+On 2026-10-24 the plugins took the publisher's name, so that each one is distinct in Anthropic's plugin directory: `dev-workflow`, `repo-ops` and `own-it` became `devofcodes-dev-workflow`, `devofcodes-repo-ops` and `devofcodes-own-it`. Skills kept their names; only the namespace changed (`/devofcodes-repo-ops:ticket-writer`). An installed copy under an old name stops updating. To move over:
+
+```text
+/plugin uninstall dev-workflow@agent-toolkit
+/plugin uninstall repo-ops@agent-toolkit
+/plugin uninstall own-it@agent-toolkit
+/plugin install devofcodes-dev-workflow@agent-toolkit
+/plugin install devofcodes-repo-ops@agent-toolkit
+/plugin install devofcodes-own-it@agent-toolkit
+```
+
+A routine that reads a skill from a checkout needs the new folder, for example `plugins/devofcodes-repo-ops/skills/status-digest/SKILL.md`.
 
 ## How they fit together
 
@@ -40,7 +55,7 @@ ticket-writer ──> the work ──> land-branch ──> feature-doc
 4. `feature-doc` writes up what shipped.
 5. `status-digest` reads everything twice a week and reports what is red, stale or due. `backlog-planner` turns the bigger items into ordered draft tickets.
 
-## dev-workflow
+## devofcodes-dev-workflow
 
 ### feature-doc
 
@@ -60,7 +75,7 @@ Lands a branch on a `main` that moved ahead while you worked, typically because 
 - **How it works:** in a fixed order. It lists the files both sides changed and flags real collisions before touching anything. It rebases, runs your fast checks, and force-pushes the branch with `--force-with-lease`. It opens or updates the PR and waits for every check. It reads failed logs and decides whether the fault is in the branch, the rebase, the runner or `main`. It squash-merges, then runs your rebuild command.
 - **Ask it:** "land this branch", "main moved, rebase and merge this".
 - **Won't:** merge with a check pending or red, use `--auto` or `--admin`, or force-push `main`. It never guesses a rebuild command.
-- **Needs:** `git` and the GitHub CLI. Optional settings in `.claude/toolkit.json`: your fast checks, how long CI usually takes, and your rebuild command. See the [dev-workflow README](plugins/dev-workflow/README.md#settings-claudetoolkitjson).
+- **Needs:** `git` and the GitHub CLI. Optional settings in `.claude/toolkit.json`: your fast checks, how long CI usually takes, and your rebuild command. See the [devofcodes-dev-workflow README](plugins/devofcodes-dev-workflow/README.md#settings-claudetoolkitjson).
 
 ### docker-cleanup
 
@@ -72,9 +87,9 @@ Frees disk space in a local Docker install without deleting anything you still n
 - **Won't:** delete a volume you did not name, or run a wholesale `docker system prune -a` or `docker volume prune`.
 - **Needs:** Docker, and Windows PowerShell 5.1 or PowerShell 7 on Windows, macOS or Linux. CI runs the audit and a dry run on Linux.
 
-## repo-ops
+## devofcodes-repo-ops
 
-These read your org's values (owner, repos, board, labels, routing) from `.claude/toolkit.json` in your backlog repo. If the file is missing, they ask and offer to write it. See the [repo-ops README](plugins/repo-ops/README.md#settings-claudetoolkitjson) for every key, and [`examples/acme/`](examples/acme/README.md) for a filled-in example.
+These read your org's values (owner, repos, board, labels, routing) from `.claude/toolkit.json` in your backlog repo. If the file is missing, they ask and offer to write it. See the [devofcodes-repo-ops README](plugins/devofcodes-repo-ops/README.md#settings-claudetoolkitjson) for every key, and [`examples/acme/`](examples/acme/README.md) for a filled-in example.
 
 ### ticket-writer
 
@@ -100,7 +115,7 @@ Answers "what needs me?" across every repo you list.
 
 Keeps one page that maps your org: every repo, account and provider, the rules that hold across them, and the command that shows each one's live state.
 
-- **You get:** answers to org-level questions with the source and the date of each fact. If you have no map yet, it builds a draft from live reads using [the template](plugins/repo-ops/skills/org-map/templates/org-map.md), and shows it to you before writing.
+- **You get:** answers to org-level questions with the source and the date of each fact. If you have no map yet, it builds a draft from live reads using [the template](plugins/devofcodes-repo-ops/skills/org-map/templates/org-map.md), and shows it to you before writing.
 - **Ask it:** "what runs where?", "who applies the infrastructure?", "where is this tracked?", "build our org map".
 - **Won't:** state a fact as current without reading it live, edit the map without asking, or put secrets or credentials in it.
 
@@ -113,7 +128,7 @@ A read-only planner for work that spans several repos or accounts.
 - **Ask it:** "plan moving our DNS to the new provider", "turn this list of findings into tickets".
 - **Won't:** create or edit anything. It has no edit tools, and its prompt names the only commands it may run. To block writes outright, add the permission rules in [the read-only agents pattern](patterns/read-only-agents.md).
 
-## own-it
+## devofcodes-own-it
 
 Inspired by *Extreme Ownership* by Jocko Willink and Leif Babin ([book](https://openlibrary.org/works/OL20017105W) · [@jockowillink](https://x.com/jockowillink)). Not affiliated with or endorsed by them. The doctrine in these skills is in our own words.
 
@@ -147,7 +162,7 @@ Reviews something that failed (a release, a UAT round, a deploy, a migration, a 
 ## Honest notes
 
 - Built for a one-person company. A team may want more approvals, not fewer.
-- The `repo-ops` skills assume GitHub and the `gh` CLI. `docker-cleanup` assumes Docker.
+- The `devofcodes-repo-ops` skills assume GitHub and the `gh` CLI. `docker-cleanup` assumes Docker.
 - `after-action` is hard on plans and processes on purpose. It never names a person, but read the debrief before you share it with your team.
 - Written for Claude Code. The rules and patterns carry over to other agents; the install steps do not.
 

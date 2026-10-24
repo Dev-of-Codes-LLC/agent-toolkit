@@ -6,11 +6,11 @@ Acme Labs is a two-person studio with four repos in the GitHub org `acme-labs`. 
 
 | File | What it shows | Used by |
 | --- | --- | --- |
-| [`toolkit.json`](../../plugins/repo-ops/toolkit.example.json) | Their `.claude/toolkit.json`: owner, routing, board, labels, digest and `landBranch` | Every skill that reads settings |
-| [`org-map.md`](../../plugins/repo-ops/skills/org-map/examples/acme-org-map.md) | Their org map: repos, providers, rules and where work is tracked | `org-map`, `backlog-planner` |
+| [`toolkit.json`](../../plugins/devofcodes-repo-ops/toolkit.example.json) | Their `.claude/toolkit.json`: owner, routing, board, labels, digest and `landBranch` | Every skill that reads settings |
+| [`org-map.md`](../../plugins/devofcodes-repo-ops/skills/org-map/examples/acme-org-map.md) | Their org map: repos, providers, rules and where work is tracked | `org-map`, `backlog-planner` |
 | [`sample-digest.md`](sample-digest.md) | One digest comment, as the routine posts it | `status-digest` |
 
-The first two files live inside the `repo-ops` plugin, so they ship with every install and the skills can point at them. This folder links to them instead of keeping a second copy.
+The first two files live inside the `devofcodes-repo-ops` plugin, so they ship with every install and the skills can point at them. This folder links to them instead of keeping a second copy.
 
 ## Try it on your own org
 

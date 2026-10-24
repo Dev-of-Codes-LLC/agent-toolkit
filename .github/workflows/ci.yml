@@ -88,13 +88,13 @@ jobs:
       - name: feature-doc renders a page
         run: |
           out="${RUNNER_TEMP}/sample.html"
-          node plugins/dev-workflow/skills/feature-doc/scripts/render.mjs tests/feature-doc/sample.md "${out}"
+          node plugins/devofcodes-dev-workflow/skills/feature-doc/scripts/render.mjs tests/feature-doc/sample.md "${out}"
           grep -q 'name="source-sha256"' "${out}"
       - name: feature-doc renderer tests (SVG sanitizer, unescape)
         run: node --test "tests/**/*.test.mjs"
       - name: docker-cleanup audit (read-only)
         shell: pwsh
-        run: ./plugins/dev-workflow/skills/docker-cleanup/scripts/audit.ps1
+        run: ./plugins/devofcodes-dev-workflow/skills/docker-cleanup/scripts/audit.ps1
       - name: docker-cleanup dry run (no -Execute)
         shell: pwsh
-        run: ./plugins/dev-workflow/skills/docker-cleanup/scripts/cleanup.ps1 -Tier cache,builders,networks,containers,images
+        run: ./plugins/devofcodes-dev-workflow/skills/docker-cleanup/scripts/cleanup.ps1 -Tier cache,builders,networks,containers,images

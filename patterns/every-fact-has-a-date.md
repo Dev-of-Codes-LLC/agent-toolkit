@@ -18,6 +18,6 @@ Live state goes stale. A check that passed, a PR that was open, a renewal date: 
 
 ## Examples in this toolkit
 
-- [`org-map`](../plugins/repo-ops/skills/org-map/SKILL.md) is "a map, not a snapshot", with a live-state command per row.
-- [`ticket-writer`](../plugins/repo-ops/skills/ticket-writer/SKILL.md) issue bodies say "Checked YYYY-MM-DD: ..." for what was read live.
-- [`feature-doc`](../plugins/dev-workflow/skills/feature-doc/SKILL.md) checks status and delivery path with commands, and checks them again before the page is finished.
+- [`org-map`](../plugins/devofcodes-repo-ops/skills/org-map/SKILL.md) is "a map, not a snapshot", with a live-state command per row.
+- [`ticket-writer`](../plugins/devofcodes-repo-ops/skills/ticket-writer/SKILL.md) issue bodies say "Checked YYYY-MM-DD: ..." for what was read live.
+- [`feature-doc`](../plugins/devofcodes-dev-workflow/skills/feature-doc/SKILL.md) checks status and delivery path with commands, and checks them again before the page is finished.

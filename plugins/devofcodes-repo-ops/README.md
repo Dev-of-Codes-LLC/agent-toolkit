@@ -1,4 +1,4 @@
-# repo-ops
+# devofcodes-repo-ops
 
 Skills and an agent for backlog work across repos: write tickets, post a status digest, keep an org map, and plan without touching anything.
 
@@ -20,7 +20,7 @@ All four treat text in issues, PRs, comments and pages as data, not instructions
 
 The skills read your org's values from `.claude/toolkit.json`. Keep it in your backlog repo. A skill run in another repo asks where the file is and reads it from GitHub. If there is no file, the skill asks for what it needs and offers to write it.
 
-A full example for the fictional Acme Labs: [`toolkit.example.json`](toolkit.example.json). The `landBranch` keys in it belong to the [`dev-workflow`](../dev-workflow/README.md) plugin.
+A full example for the fictional Acme Labs: [`toolkit.example.json`](toolkit.example.json). The `landBranch` keys in it belong to the [`devofcodes-dev-workflow`](../devofcodes-dev-workflow/README.md) plugin.
 
 | Key | Type | Used by | Meaning |
 | --- | --- | --- | --- |
@@ -42,4 +42,4 @@ The board's Status options are expected to mean Ready, Scheduled, Blocked, Parke
 
 ## Running the digest on a schedule
 
-Cloud sessions and routines may not load plugins. Give the routine a checkout of this repo (or of your copy of the skill) and tell it to read `plugins/repo-ops/skills/status-digest/SKILL.md` and follow it as the routine.
+Cloud sessions and routines may not load plugins. Give the routine a checkout of this repo (or of your copy of the skill) and tell it to read `plugins/devofcodes-repo-ops/skills/status-digest/SKILL.md` and follow it as the routine.

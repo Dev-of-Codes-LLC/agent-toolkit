@@ -1,4 +1,4 @@
-# dev-workflow
+# devofcodes-dev-workflow
 
 Skills for day-to-day development.
 

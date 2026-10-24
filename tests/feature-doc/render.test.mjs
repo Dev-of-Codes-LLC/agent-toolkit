@@ -14,7 +14,7 @@ import { join, dirname } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
-const skill = join(root, "plugins", "dev-workflow", "skills", "feature-doc");
+const skill = join(root, "plugins", "devofcodes-dev-workflow", "skills", "feature-doc");
 const renderer = join(skill, "scripts", "render.mjs");
 
 function render(markdown, files = {}) {
