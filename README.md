@@ -159,6 +159,10 @@ Reviews something that failed (a release, a UAT round, a deploy, a migration, a 
 - **Every fact has a date.** A live fact carries the date it was checked. See [the pattern](patterns/every-fact-has-a-date.md).
 - **Dry run first.** Destructive steps print the exact commands and wait.
 
+## Contribute
+
+Issues and pull requests are welcome; a person reads every one. [CONTRIBUTING.md](CONTRIBUTING.md) has the rules, and the [skill problem](.github/ISSUE_TEMPLATE/skill-problem.md) template is for a skill that misbehaved.
+
 ## Honest notes
 
 - Built for a one-person company. A team may want more approvals, not fewer.
