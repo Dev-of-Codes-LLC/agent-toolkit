@@ -4,7 +4,7 @@ Claude Code skills, an agent and a routine recipe for a small software shop, pac
 
 Each one says what it will not do. Most of them only read; the few that write say exactly what they write, and show you first.
 
-Status: early. All three plugins are at version 0.2.0, renamed on 2026-10-24 (see [Renamed](#renamed)).
+Status: early. Versions, checked 2026-10-24: `devofcodes-dev-workflow` 0.2.1, `devofcodes-repo-ops` 0.2.1, `devofcodes-own-it` 0.2.1. The plugins were renamed on 2026-10-24 (see [Renamed](#renamed)).
 
 ## Install
 
