@@ -42,4 +42,4 @@ A planning agent is most useful when it can read everything and change nothing. 
 
 ## Example
 
-[`backlog-planner`](../plugins/repo-ops/agents/backlog-planner.md) returns tickets in the format of [`ticket-writer`](../plugins/repo-ops/skills/ticket-writer/SKILL.md). It limits its tools and lists its commands. Add the deny rules above if you want writes blocked, not only forbidden.
+[`backlog-planner`](../plugins/devofcodes-repo-ops/agents/backlog-planner.md) returns tickets in the format of [`ticket-writer`](../plugins/devofcodes-repo-ops/skills/ticket-writer/SKILL.md). It limits its tools and lists its commands. Add the deny rules above if you want writes blocked, not only forbidden.

@@ -136,6 +136,6 @@ comment.
 
 Cloud sessions and scheduled routines may not load plugins. Give the routine a
 checkout of the repository that holds this file (or a copy of it), and say in
-its prompt: "Read `plugins/repo-ops/skills/status-digest/SKILL.md` and follow
+its prompt: "Read `plugins/devofcodes-repo-ops/skills/status-digest/SKILL.md` and follow
 it as the routine." The routine needs read access to every repo in
 `digest.repos`, and write access only to comment on the digest issue.

@@ -4,12 +4,12 @@
   "repo": "https://github.com/Dev-of-Codes-LLC/agent-toolkit",
   "branch": "main",
   "licence": "MIT",
-  "updated": "2026-10-21",
+  "updated": "2026-10-24",
   "install": [
     "/plugin marketplace add Dev-of-Codes-LLC/agent-toolkit",
-    "/plugin install dev-workflow@agent-toolkit",
-    "/plugin install repo-ops@agent-toolkit",
-    "/plugin install own-it@agent-toolkit"
+    "/plugin install devofcodes-dev-workflow@agent-toolkit",
+    "/plugin install devofcodes-repo-ops@agent-toolkit",
+    "/plugin install devofcodes-own-it@agent-toolkit"
   ],
   "counts": {
     "skill": 7,
@@ -43,8 +43,8 @@
     {
       "kind": "skill",
       "name": "feature-doc",
-      "plugin": "dev-workflow",
-      "path": "plugins/dev-workflow/skills/feature-doc",
+      "plugin": "devofcodes-dev-workflow",
+      "path": "plugins/devofcodes-dev-workflow/skills/feature-doc",
       "featured": true,
       "what": "Turns a finished feature or pull request into a wiki-ready page in the repo, plus a one-page HTML reference sheet with lettered panels and an optional whiteboard-style diagram. The writing follows a relaxed ASD-STE100 Simplified Technical English.",
       "wont": "Claim a fact it could not trace to the code, a record or a command. Gaps are listed, not filled.",
@@ -53,48 +53,48 @@
     {
       "kind": "skill",
       "name": "land-branch",
-      "plugin": "dev-workflow",
-      "path": "plugins/dev-workflow/skills/land-branch",
+      "plugin": "devofcodes-dev-workflow",
+      "path": "plugins/devofcodes-dev-workflow/skills/land-branch",
       "what": "Lands a branch on a main that moved ahead: shows the overlap, rebases, opens the PR, waits for every check, squash-merges, then runs your rebuild command.",
       "wont": "Merge with a check pending or red, use --auto or --admin, or force-push main."
     },
     {
       "kind": "skill",
       "name": "docker-cleanup",
-      "plugin": "dev-workflow",
-      "path": "plugins/dev-workflow/skills/docker-cleanup",
+      "plugin": "devofcodes-dev-workflow",
+      "path": "plugins/devofcodes-dev-workflow/skills/docker-cleanup",
       "what": "Audits a local Docker install by compose project and frees space tier by tier: build cache, broken builders, orphan networks, exited containers, old images. Dry run first.",
       "wont": "Delete a volume you did not name, or run a wholesale prune."
     },
     {
       "kind": "skill",
       "name": "ticket-writer",
-      "plugin": "repo-ops",
-      "path": "plugins/repo-ops/skills/ticket-writer",
+      "plugin": "devofcodes-repo-ops",
+      "path": "plugins/devofcodes-repo-ops/skills/ticket-writer",
       "what": "Turns a request or finding into GitHub issues in one format: the right repo, a duplicate check, one outcome per issue, a task list with exact steps, and a Status and Due on your project board.",
       "wont": "File a second issue when one already covers the work, or file anything when you asked only for a plan."
     },
     {
       "kind": "skill",
       "name": "status-digest",
-      "plugin": "repo-ops",
-      "path": "plugins/repo-ops/skills/status-digest",
+      "plugin": "devofcodes-repo-ops",
+      "path": "plugins/devofcodes-repo-ops/skills/status-digest",
       "what": "Checks every repo you list for red CI, failed deploys, stale or conflicting PRs, overdue and blocked backlog items and board drift, and writes one short digest of what needs you.",
       "wont": "Re-run, merge, label or close anything it finds."
     },
     {
       "kind": "skill",
       "name": "org-map",
-      "plugin": "repo-ops",
-      "path": "plugins/repo-ops/skills/org-map",
+      "plugin": "devofcodes-repo-ops",
+      "path": "plugins/devofcodes-repo-ops/skills/org-map",
       "what": "Answers org-level questions from one page that maps every repo, account and rule, with the command that shows each one's live state. Builds that page from a template. Ships with a fictional example org.",
       "wont": "State a fact as current without reading it live, or edit the map without asking."
     },
     {
       "kind": "skill",
       "name": "after-action",
-      "plugin": "own-it",
-      "path": "plugins/own-it/skills/after-action",
+      "plugin": "devofcodes-own-it",
+      "path": "plugins/devofcodes-own-it/skills/after-action",
       "what": "Reviews a failed release, UAT round, deploy or deadline in the voice of a blunt SEAL task-unit commander. It reads the evidence itself, turns every excuse into something the team controls, and gives exactly three fixes, the first one first. Inspired by Extreme Ownership.",
       "wont": "Edit code or file anything during the review, name or blame a person, or state a cause it could not trace to evidence.",
       "tags": ["Fixed debrief format", "Evals included"]
@@ -102,8 +102,8 @@
     {
       "kind": "agent",
       "name": "backlog-planner",
-      "plugin": "repo-ops",
-      "path": "plugins/repo-ops/agents/backlog-planner.md",
+      "plugin": "devofcodes-repo-ops",
+      "path": "plugins/devofcodes-repo-ops/agents/backlog-planner.md",
       "what": "Give it a goal or a messy list. It reads the live state across your repos and returns draft tickets in order, with what blocks what and what only the owner can do.",
       "wont": "Create or edit anything. It has no edit tools, its prompt names the only commands it may run, and it returns drafts."
     },

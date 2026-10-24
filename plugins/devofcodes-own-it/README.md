@@ -1,4 +1,4 @@
-# own-it
+# devofcodes-own-it
 
 Skills that review what failed in the voice of a blunt SEAL task-unit commander, and end with the one thing to do first. The voice is hard; the facts are checked; nobody is named and blamed.
 

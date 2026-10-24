@@ -7,18 +7,18 @@
   },
   "plugins": [
     {
-      "name": "dev-workflow",
-      "source": "./plugins/dev-workflow",
+      "name": "devofcodes-dev-workflow",
+      "source": "./plugins/devofcodes-dev-workflow",
       "description": "Day-to-day development: write up finished features, land branches, clean up Docker"
     },
     {
-      "name": "repo-ops",
-      "source": "./plugins/repo-ops",
+      "name": "devofcodes-repo-ops",
+      "source": "./plugins/devofcodes-repo-ops",
       "description": "Backlog work across repos: write tickets, post status digests, keep an org map, plan read-only"
     },
     {
-      "name": "own-it",
-      "source": "./plugins/own-it",
+      "name": "devofcodes-own-it",
+      "source": "./plugins/devofcodes-own-it",
       "description": "Blunt, evidence-first reviews of what failed and what to fix first, inspired by Extreme Ownership"
     }
   ]

@@ -1,10 +1,10 @@
 # Routine: status digest
 
-Run the [`status-digest`](../plugins/repo-ops/skills/status-digest/SKILL.md) skill on a schedule. Each run posts one comment on your digest issue, covering everything since the last comment. Apart from that comment, it is read-only.
+Run the [`status-digest`](../plugins/devofcodes-repo-ops/skills/status-digest/SKILL.md) skill on a schedule. Each run posts one comment on your digest issue, covering everything since the last comment. Apart from that comment, it is read-only.
 
 ## What you need first
 
-1. **A settings file.** `.claude/toolkit.json` in your backlog repo, with `owner`, `backlog` and `digest` filled in. See the [repo-ops settings](../plugins/repo-ops/README.md#settings-claudetoolkitjson) and the [Acme example](../plugins/repo-ops/toolkit.example.json).
+1. **A settings file.** `.claude/toolkit.json` in your backlog repo, with `owner`, `backlog` and `digest` filled in. See the [devofcodes-repo-ops settings](../plugins/devofcodes-repo-ops/README.md#settings-claudetoolkitjson) and the [Acme example](../plugins/devofcodes-repo-ops/toolkit.example.json).
 2. **A digest issue.** In the backlog repo, open an issue with the exact title in `digest.issueTitle` (for example "Status digest") and pin it. Keep it open, and keep its title: the routine finds the issue by its title.
 3. **Access.** The routine's GitHub access must read every repo in `digest.repos` and the backlog board, and comment on issues in the backlog repo. It needs nothing else.
 
@@ -25,7 +25,7 @@ Each run starts a new cloud session, so the schedule keeps working after any one
 ```text
 You are the status digest routine.
 
-1. Read plugins/repo-ops/skills/status-digest/SKILL.md from the toolkit
+1. Read plugins/devofcodes-repo-ops/skills/status-digest/SKILL.md from the toolkit
    checkout and follow it in its routine mode.
 2. Read the settings from .claude/toolkit.json in the backlog repo checkout.
 3. Post the digest as ONE comment on the open issue in backlog.repo whose

@@ -4,7 +4,7 @@ A skill written for one organization is full of its names: the repos, the board,
 
 ## How
 
-1. Keep the org's values in `.claude/toolkit.json`, in the repository where most of the work is tracked. Each plugin owns its own keys: see the [repo-ops settings](../plugins/repo-ops/README.md#settings-claudetoolkitjson) and the [dev-workflow settings](../plugins/dev-workflow/README.md#settings-claudetoolkitjson).
+1. Keep the org's values in `.claude/toolkit.json`, in the repository where most of the work is tracked. Each plugin owns its own keys: see the [devofcodes-repo-ops settings](../plugins/devofcodes-repo-ops/README.md#settings-claudetoolkitjson) and the [devofcodes-dev-workflow settings](../plugins/devofcodes-dev-workflow/README.md#settings-claudetoolkitjson).
 2. Start each skill with "Read the settings": where the file is, which keys this skill uses, and what to do when the file is missing.
 3. **When the file is missing, ask, then offer to write it.** Never guess a repository, a board or a command.
 4. **Say "the owner", not a name.** The rule "only the owner merges to production" travels. A first name does not.

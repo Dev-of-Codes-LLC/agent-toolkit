@@ -8,7 +8,7 @@ Cloud sessions and scheduled routines may not load plugins, even when a reposito
 2. In the prompt, name the file and the mode:
 
    ```text
-   Read plugins/repo-ops/skills/status-digest/SKILL.md in the checkout and
+   Read plugins/devofcodes-repo-ops/skills/status-digest/SKILL.md in the checkout and
    follow it as the routine.
    ```
 
@@ -23,4 +23,4 @@ If you copy the skill's text into a routine prompt, you have two versions. They 
 
 ## Example
 
-The [status-digest routine recipe](../routines/status-digest.md) is one prompt that points at [`status-digest/SKILL.md`](../plugins/repo-ops/skills/status-digest/SKILL.md).
+The [status-digest routine recipe](../routines/status-digest.md) is one prompt that points at [`status-digest/SKILL.md`](../plugins/devofcodes-repo-ops/skills/status-digest/SKILL.md).
