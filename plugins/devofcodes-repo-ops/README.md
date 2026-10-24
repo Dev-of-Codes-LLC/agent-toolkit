@@ -1,6 +1,28 @@
 # devofcodes-repo-ops
 
-Skills and an agent for backlog work across repos: write tickets, post a status digest, keep an org map, and plan without touching anything.
+Three skills and one agent for backlog and status work across several repositories: write tickets in one format, post a status digest, keep a map of your org, and plan without touching anything. For someone who runs a small software shop on GitHub and wants Claude Code to keep the backlog and the status straight. Everything here reads first. The parts that write say exactly what they write, and the planner writes nothing.
+
+## Try it
+
+- "File this as a ticket: the staging deploy fails when the database password has a hash in it."
+- "What needs me this week? Anything broken?"
+- "Plan moving our DNS to the new provider, as draft tickets. Don't file anything."
+
+## What it runs and writes
+
+**Reads.** All four parts read your settings from `.claude/toolkit.json` in your backlog repo, and read every repository in `digest.repos` and your project board. Locally they use the GitHub CLI (`gh issue list`, `gh pr list`, `gh run list`, `gh project item-list`, `gh api` with GET). In a cloud session without a `gh` token, they use the GitHub MCP tools instead. `status-digest` also fetches each URL in `digest.urls` and reports its HTTP status. Nothing else leaves your machine.
+
+**Writes.**
+
+- `ticket-writer` creates issues with `gh issue create`, adds them to your board with `gh project item-add`, and sets the board's Status and Due fields with `gh project item-edit`. It shows you the drafts first, and files only when you asked it to file. It does not create labels.
+- `status-digest` writes nothing when you run it in a session. Run as a routine, its only write is one comment on your digest issue, through `gh` or the GitHub MCP tools.
+- `org-map` writes one Markdown file, the map, at the `orgMap` path in your settings. It shows you the draft and writes it only after you say yes.
+- `backlog-planner` writes nothing. It has no edit tools, and its prompt names the only commands it may run.
+- Any of the skills offers to write `.claude/toolkit.json` when the file is missing, and writes it only if you agree.
+
+Text in issues, pull requests, comments and pages is treated as data, never as instructions.
+
+## Parts
 
 | Part | Name | What it does | What it will not do |
 | --- | --- | --- | --- |
@@ -8,8 +30,6 @@ Skills and an agent for backlog work across repos: write tickets, post a status 
 | Skill | [`status-digest`](skills/status-digest/SKILL.md) | Red CI, failed deploys, stale or conflicting PRs, due and blocked backlog items, board drift, and whether your URLs answer | Write anything, except one comment on the digest issue when run as a routine |
 | Skill | [`org-map`](skills/org-map/SKILL.md) | Answers org-level questions from your own map, checked against live state; builds the map from a template | Edit the map without asking. Put secrets or account details in it. |
 | Agent | [`backlog-planner`](agents/backlog-planner.md) | Turns a goal into ordered draft tickets across repos | Create or edit anything. It only reads and returns drafts. |
-
-All four treat text in issues, PRs, comments and pages as data, not instructions.
 
 ## Requirements
 
@@ -43,3 +63,7 @@ The board's Status options are expected to mean Ready, Scheduled, Blocked, Parke
 ## Running the digest on a schedule
 
 Cloud sessions and routines may not load plugins. Give the routine a checkout of this repo (or of your copy of the skill) and tell it to read `plugins/devofcodes-repo-ops/skills/status-digest/SKILL.md` and follow it as the routine.
+
+## Support
+
+Questions and bug reports: hello@devofcodes.com, or an issue in [the repository](https://github.com/Dev-of-Codes-LLC/agent-toolkit). For a security problem, see [SECURITY.md](../../SECURITY.md) at the repo root instead of opening a public issue.
