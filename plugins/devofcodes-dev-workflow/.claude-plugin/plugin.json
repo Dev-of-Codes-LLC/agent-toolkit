@@ -1,6 +1,6 @@
 {
   "name": "devofcodes-dev-workflow",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "Day-to-day development: write up finished features, land branches, clean up Docker",
   "author": {
     "name": "Dev of Codes LLC",
