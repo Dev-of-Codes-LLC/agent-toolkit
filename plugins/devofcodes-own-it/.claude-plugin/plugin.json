@@ -1,11 +1,18 @@
 {
   "name": "devofcodes-own-it",
-  "version": "0.2.2",
+  "displayName": "DevOfCodes Own It",
+  "version": "0.2.3",
   "description": "Blunt, evidence-first reviews of what failed and what to fix first, inspired by Extreme Ownership",
   "author": {
     "name": "Dev of Codes LLC",
-    "email": "hello@devofcodes.com"
+    "email": "hello@devofcodes.com",
+    "url": "https://devofcodes.com"
   },
+  "homepage": "https://devofcodes.com/toolkit.html",
   "repository": "https://github.com/Dev-of-Codes-LLC/agent-toolkit",
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": ["after-action", "post-mortem", "retrospective", "incident-review", "extreme-ownership", "debrief"],
+  "icon": "./.claude-plugin/icon.png",
+  "documentationUrl": "https://github.com/Dev-of-Codes-LLC/agent-toolkit/tree/main/plugins/devofcodes-own-it",
+  "supportUrl": "https://github.com/Dev-of-Codes-LLC/agent-toolkit/issues/new/choose"
 }

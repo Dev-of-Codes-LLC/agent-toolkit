@@ -1,11 +1,18 @@
 {
   "name": "devofcodes-repo-ops",
-  "version": "0.2.2",
+  "displayName": "DevOfCodes Repo Ops",
+  "version": "0.2.3",
   "description": "Backlog work across repos: write tickets, post status digests, keep an org map, plan read-only",
   "author": {
     "name": "Dev of Codes LLC",
-    "email": "hello@devofcodes.com"
+    "email": "hello@devofcodes.com",
+    "url": "https://devofcodes.com"
   },
+  "homepage": "https://devofcodes.com/toolkit.html",
   "repository": "https://github.com/Dev-of-Codes-LLC/agent-toolkit",
-  "license": "MIT"
+  "license": "MIT",
+  "keywords": ["backlog", "tickets", "github-issues", "status-digest", "org-map", "github-projects", "planning"],
+  "icon": "./.claude-plugin/icon.png",
+  "documentationUrl": "https://github.com/Dev-of-Codes-LLC/agent-toolkit/tree/main/plugins/devofcodes-repo-ops",
+  "supportUrl": "https://github.com/Dev-of-Codes-LLC/agent-toolkit/issues/new/choose"
 }
