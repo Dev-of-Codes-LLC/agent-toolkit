@@ -39,3 +39,5 @@ EVIDENCE                   every source with the date checked, and what could no
 ## Support
 
 Questions and bug reports: hello@devofcodes.com, or an issue in [the repository](https://github.com/Dev-of-Codes-LLC/agent-toolkit). For a security problem, see [SECURITY.md](../../SECURITY.md) at the repo root instead of opening a public issue.
+
+Privacy: nothing the plugin reads or writes reaches Dev of Codes LLC. [PRIVACY.md](../../PRIVACY.md) at the repo root says what it reads, writes and keeps.

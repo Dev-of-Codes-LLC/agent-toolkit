@@ -1,7 +1,7 @@
 {
   "name": "devofcodes-dev-workflow",
   "displayName": "DevOfCodes Dev Workflow",
-  "version": "0.2.4",
+  "version": "0.2.5",
   "description": "Day-to-day development: write up finished features, land branches, clean up Docker",
   "author": {
     "name": "Dev of Codes LLC",
@@ -13,6 +13,7 @@
   "license": "MIT",
   "keywords": ["feature-doc", "land-branch", "docker-cleanup", "git", "github", "documentation", "docker"],
   "icon": "./.claude-plugin/icon.png",
+  "privacyPolicyUrl": "https://github.com/Dev-of-Codes-LLC/agent-toolkit/blob/main/PRIVACY.md",
   "documentationUrl": "https://github.com/Dev-of-Codes-LLC/agent-toolkit/tree/main/plugins/devofcodes-dev-workflow",
   "supportUrl": "https://github.com/Dev-of-Codes-LLC/agent-toolkit/issues/new/choose"
 }

@@ -172,4 +172,4 @@ Issues and pull requests are welcome; a person reads every one. [CONTRIBUTING.md
 
 ## Licence
 
-MIT. See [LICENSE](LICENSE). Made by Dev of Codes LLC. To report a security problem, see [SECURITY.md](SECURITY.md).
+MIT. See [LICENSE](LICENSE). Made by Dev of Codes LLC. What the plugins do with your data: [PRIVACY.md](PRIVACY.md). To report a security problem, see [SECURITY.md](SECURITY.md).
