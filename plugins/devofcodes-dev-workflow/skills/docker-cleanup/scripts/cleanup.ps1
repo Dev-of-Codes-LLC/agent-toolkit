@@ -52,7 +52,7 @@ function Split-List([string[]]$v) { @($v | ForEach-Object { $_ -split ',' } | Fo
 $Tier = Split-List $Tier; $Protected = Split-List $Protected; $Volume = Split-List $Volume; $Project = Split-List $Project
 function Test-ProjectSelected([string]$name) {
   if ($Project.Count -eq 0) { return $true }
-  foreach ($pat in $Project) { if ($name -like $pat) { return $true } }
+  foreach ($pattern in $Project) { if ($name -like $pattern) { return $true } }
   return $false
 }
 $validTiers = @('cache', 'builders', 'networks', 'containers', 'images', 'volumes')
