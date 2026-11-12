@@ -288,8 +288,13 @@ foreach ($i in $images) {
 }
 
 $cacheTotal = ($cache | Measure-Object Bytes -Sum).Sum
-$cacheStale = @($cache | Where-Object { $_.Reclaimable -and $_.LastUsedDays -ge $StaleDays })
-$cacheStaleBytes = ($cacheStale | Measure-Object Bytes -Sum).Sum
+# A record an image still uses (Shared) is not removed by a prune by age, whatever its age: it goes
+# when the image goes. Only the private records count as what the cache tier frees (#21).
+$cacheOld = @($cache | Where-Object { $_.Reclaimable -and $_.LastUsedDays -ge $StaleDays })
+$cacheStale = @($cacheOld | Where-Object { -not $_.Shared })
+$cacheStaleBytes = [long]($cacheStale | Measure-Object Bytes -Sum).Sum
+$cacheHeld = @($cacheOld | Where-Object { $_.Shared })
+$cacheHeldBytes = [long]($cacheHeld | Measure-Object Bytes -Sum).Sum
 
 $result = [ordered]@{
   GeneratedAt = [DateTimeOffset]::UtcNow.ToString('u')
@@ -300,7 +305,7 @@ $result = [ordered]@{
   Images = $images
   Volumes = $volumes
   Networks = $networks
-  BuildCache = [ordered]@{ Records = $cache.Count; Bytes = $cacheTotal; StaleRecords = $cacheStale.Count; StaleBytes = $cacheStaleBytes }
+  BuildCache = [ordered]@{ Records = $cache.Count; Bytes = $cacheTotal; StaleRecords = $cacheStale.Count; StaleBytes = $cacheStaleBytes; HeldRecords = $cacheHeld.Count; HeldBytes = $cacheHeldBytes }
   BrokenBuilders = $brokenBuilders
 }
 
@@ -353,7 +358,7 @@ Section 'Networks'
 $networks | Sort-Object Class, Name | Select-Object Name, Project, Class | Format-Table -AutoSize | Out-String
 
 Section 'Build cache'
-Write-Output ("records: {0}   total: {1}   unused >= {2} days: {3} records, {4}" -f $cache.Count, (Format-Bytes $cacheTotal), $StaleDays, $cacheStale.Count, (Format-Bytes $cacheStaleBytes))
+Write-Output ("records: {0}   total: {1}   unused >= {2} days: {3} records, {4}   held by images (freed only when those images go): {5} records, {6}" -f $cache.Count, (Format-Bytes $cacheTotal), $StaleDays, $cacheStale.Count, (Format-Bytes $cacheStaleBytes), $cacheHeld.Count, (Format-Bytes $cacheHeldBytes))
 
 Section 'Buildx builders in error state'
 if ($brokenBuilders.Count -eq 0) { Write-Output 'none' } else {
@@ -362,7 +367,7 @@ if ($brokenBuilders.Count -eq 0) { Write-Output 'none' } else {
 
 Section 'Cleanup candidates (what cleanup.ps1 would act on)'
 $rows = @()
-$rows += [pscustomobject]@{ Tier = 'cache';      Items = $cacheStale.Count; Frees = Format-Bytes $cacheStaleBytes; Note = "build-cache records unused >= $StaleDays days (cleanup keeps the last -KeepCacheDays)" }
+$rows += [pscustomobject]@{ Tier = 'cache';      Items = $cacheStale.Count; Frees = Format-Bytes $cacheStaleBytes; Note = "build-cache records unused >= $StaleDays days that no image holds (cleanup keeps the last -KeepCacheDays); $($cacheHeld.Count) more, $(Format-Bytes $cacheHeldBytes), are held by images" }
 $rows += [pscustomobject]@{ Tier = 'containers'; Items = @($stopped | Where-Object { $_.Project -notin $protectedNames }).Count; Frees = '-'; Note = 'exited containers outside protected projects' }
 $imgCand = @($images | Where-Object Class -in @('dangling', 'project-residue'))
 $rows += [pscustomobject]@{ Tier = 'images';     Items = $imgCand.Count; Frees = Format-Bytes (($imgCand | Measure-Object UniqueBytes -Sum).Sum); Note = 'dangling + builds of torn-down projects (add -IncludePulled / -IncludeLocalUnmatched for more)' }
