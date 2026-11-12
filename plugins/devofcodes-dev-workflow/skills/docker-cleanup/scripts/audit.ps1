@@ -292,9 +292,9 @@ $cacheTotal = ($cache | Measure-Object Bytes -Sum).Sum
 # when the image goes. Only the private records count as what the cache tier frees (#21).
 $cacheOld = @($cache | Where-Object { $_.Reclaimable -and $_.LastUsedDays -ge $StaleDays })
 $cacheStale = @($cacheOld | Where-Object { -not $_.Shared })
-$cacheStaleBytes = ($cacheStale | Measure-Object Bytes -Sum).Sum
+$cacheStaleBytes = [long]($cacheStale | Measure-Object Bytes -Sum).Sum
 $cacheHeld = @($cacheOld | Where-Object { $_.Shared })
-$cacheHeldBytes = ($cacheHeld | Measure-Object Bytes -Sum).Sum
+$cacheHeldBytes = [long]($cacheHeld | Measure-Object Bytes -Sum).Sum
 
 $result = [ordered]@{
   GeneratedAt = [DateTimeOffset]::UtcNow.ToString('u')
