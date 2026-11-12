@@ -92,11 +92,13 @@ function Add-Action([string]$tier, [string]$label, [string[]]$cmd, [long]$frees 
 # ---- cache
 if ('cache' -in $Tier) {
   $hours = $KeepCacheDays * 24
-  # buildx du has no per-record removal; the audit's stale figure (records unused >= StaleDays) is the lower bound of what this frees
+  # buildx du has no per-record removal. The audit's stale figure is the records unused >= StaleDays
+  # that no image holds: a prune by age leaves a record an image still uses, whatever its age (#21).
   $frees = [long]$a.BuildCache.StaleBytes
   # Upper bound: BuildKit keeps an old record while a newer record still depends on it, so the prune
   # usually returns less than this. The command's own "Total:" line is the real figure.
-  Add-Action 'cache' "build-cache records unused for more than $KeepCacheDays days (up to $($a.BuildCache.StaleRecords) records unused >= $StaleDays days, $(Format-Bytes $frees); parents of recent layers are kept)" @('buildx', 'prune', '--force', '--filter', "unused-for=${hours}h") $frees
+  $held = if ($a.BuildCache.HeldRecords) { "; $($a.BuildCache.HeldRecords) older records, $(Format-Bytes ([long]$a.BuildCache.HeldBytes)), are held by images and stay until those images are removed" } else { '' }
+  Add-Action 'cache' "build-cache records unused for more than $KeepCacheDays days (up to $($a.BuildCache.StaleRecords) records unused >= $StaleDays days, $(Format-Bytes $frees); parents of recent layers are kept$held)" @('buildx', 'prune', '--force', '--filter', "unused-for=${hours}h") $frees
 }
 
 # ---- builders

@@ -126,6 +126,15 @@ The examples below use the Windows form.
   Report what the prune actually returned and offer a shorter
   `-KeepCacheDays` as a follow-up rather than re-running with a bigger
   hammer; the user knows whether they are about to rebuild.
+- **Old build cache that an image holds is not freed by a cache prune.**
+  A cache record an image still uses (`Shared: true` in
+  `docker buildx du --verbose`) stays, whatever its age, until the image
+  is removed. The audit counts only the records no image holds as what
+  the cache tier frees, and reports the rest as "held by images". To free
+  those, remove the images first (the images tier, or `-IncludePulled` for
+  stale pulled ones), then prune the cache again. Before version 0.2.6
+  the audit counted them: on one machine it promised 13.72 GB and the
+  prune returned 0 B.
 - **Do not quietly widen the job.** If the user asked about disk space,
   running containers of other projects are not yours to stop, even when
   they are idle.
